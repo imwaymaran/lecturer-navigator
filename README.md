@@ -1,6 +1,6 @@
 # Lecture Navigator
 
-> LLM-powered assistant for querying lecture slides through a lightweight Streamlit interface.
+LLM-powered assistant for querying lecture slides through a lightweight Streamlit interface.
 
 ## Features
 
