@@ -9,12 +9,8 @@ from collections import defaultdict
 import streamlit as st
 from dotenv import load_dotenv
 
-from backend.data_loader import load_pdfs_from_folder
-from backend.splitter import split_documents
-from backend.vectorstore import create_vectorstore
-from backend.qa_chain import build_retrieval_qa
+from backend.pipeline import initialize_qa
 
-# Load environment
 load_dotenv("env/.env")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 if not OPENAI_API_KEY:
@@ -27,10 +23,7 @@ def run():
 
     if "qa" not in st.session_state:
         with st.spinner("Loading and processing lecture slides..."):
-            raw_docs = load_pdfs_from_folder("data")
-            chunks = split_documents(raw_docs)
-            vectorstore = create_vectorstore(chunks)
-            st.session_state.qa = build_retrieval_qa(vectorstore)
+            st.session_state.qa = initialize_qa()
 
     query = st.text_input("Enter your question:")
     if query:
@@ -61,7 +54,6 @@ def run():
                 st.write(f"- {file} — slides {page_str}")
         else:
             st.info("The model couldn’t find an answer in the slides.")
-
 
 if __name__ == "__main__":
     run()
